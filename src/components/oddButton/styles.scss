@@ -1,0 +1,34 @@
+.odd-button {
+  width: 80px;
+  cursor: pointer;
+  overflow: hidden;
+  text-align: center;
+  border-radius: var(--spacing-8);
+  border: 1px solid var(--color-primary);
+
+  &-name {
+    padding: var(--spacing-2) var(--spacing-6);
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+
+    .typography {
+      font-size: 0.625rem;
+    }
+  }
+
+  &-price {
+    padding: var(--spacing-2) var(--spacing-6);
+
+    .typography {
+      font-weight: var(--font-weight-bold);
+    }
+  }
+
+  &-selected {
+    background-color: var(--color-warning);
+
+    .odd-button-name {
+      border-bottom-color: var(--color-primary);
+    }
+  }
+}

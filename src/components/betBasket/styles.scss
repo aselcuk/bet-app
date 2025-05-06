@@ -1,0 +1,48 @@
+.bet-basket {
+  &-title {
+    min-height: 40px;
+    background-color: var(--color-primary);
+    border-top-left-radius: var(--spacing-8);
+    border-top-right-radius: var(--spacing-8);
+
+    & > .flex-box {
+      min-height: 40px;
+    }
+  }
+
+  &-content {
+    min-height: 152px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-bottom-left-radius: var(--spacing-8);
+    border-bottom-right-radius: var(--spacing-8);
+    background-color: var(--color-neutral);
+
+    &-title {
+      padding: var(--spacing-8);
+      border-bottom: 1px solid var(--color-border);
+    }
+  }
+
+  &-footer {
+    padding: var(--spacing-8);
+    border-top: 1px solid var(--color-border);
+  }
+
+  &-item {
+    background-color: var(--color-white);
+    padding: var(--spacing-8);
+
+    &-odd-button {
+      background-color: var(--color-neutral);
+
+      .odd-button-name {
+        border-bottom: unset;
+      }
+    }
+
+    &-remove {
+      cursor: pointer;
+    }
+  }
+}

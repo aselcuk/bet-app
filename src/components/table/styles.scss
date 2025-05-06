@@ -1,0 +1,23 @@
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+
+  &-head-cell,
+  &-cell {
+    text-align: left;
+    padding: var(--spacing-8);
+    border: 1px solid var(--color-border);
+  }
+
+  &-head-cell {
+    background-color: var(--color-secondary);
+    border: 1px solid var(--color-secondary);
+    border-right-color: var(--color-border);
+
+    &:last-child {
+      border-right-color: var(--color-secondary);
+    }
+  }
+}

@@ -1,0 +1,21 @@
+.main-layout {
+  width: 100%;
+  min-height: 100vh;
+  display: grid;
+  column-gap: var(--spacing-16);
+  grid-template-areas: 'betList betBasket';
+  grid-template-columns: 1fr 320px;
+
+  &-bet-list {
+    grid-area: betList;
+  }
+
+  &-bet-basket {
+    grid-area: betBasket;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: sticky;
+    top: var(--spacing-8);
+    align-self: start;
+  }
+}
