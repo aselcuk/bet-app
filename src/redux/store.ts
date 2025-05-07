@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import eventsSlice from './eventsSlice';
+import filtersSlice from './filtersSlice';
 import betBasketSlice from './betBasketSlice';
 
 export const store = configureStore({
   reducer: {
     events: eventsSlice,
+    filters: filtersSlice,
     basket: betBasketSlice
   }
 });

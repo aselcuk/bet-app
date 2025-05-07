@@ -20,5 +20,3 @@ npm run dev
 - Bundler: Vite
 - Language: TypeScript
 - Styling: SCSS
-
-

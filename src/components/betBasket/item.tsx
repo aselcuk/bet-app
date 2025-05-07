@@ -2,6 +2,7 @@ import { Box, FlexBox, OddButton, Typography } from '..';
 import ClassNames from 'classnames';
 import type { ComponentProps } from 'react';
 import type { BetBasketItem as BetBasketItemModel } from '@/model';
+import { formatMatchDate } from '@/utils';
 
 export type BetBasketItemProps = ComponentProps<'div'> & {
   basketItem: BetBasketItemModel;
@@ -66,7 +67,7 @@ export const BetBasketItem = (props: BetBasketItemProps) => {
 
           <Box>
             <Typography variant="caption">
-              {basketItem.commence_time}
+              {formatMatchDate(basketItem.commence_time)}
             </Typography>
           </Box>
         </FlexBox>

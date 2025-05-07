@@ -3,6 +3,7 @@ export * from './tabs';
 export * from './input';
 export * from './table';
 export * from './flexBox';
+export * from './emptyData';
 export * from './oddButton';
 export * from './betBasket';
 export * from './typography';

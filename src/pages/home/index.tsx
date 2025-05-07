@@ -1,44 +1,34 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Filter from './filter';
+import Bulletin from './bulletin';
 import { useEffect } from 'react';
-import ClassNames from 'classnames';
-import { Link } from 'react-router-dom';
 import type { SportsItem } from '@/model';
 import type { RootState } from '@/redux/store';
 import { getEvents, getSports } from '@/services';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  getGroupedSportsMap,
-  isSelectedEventItem,
-  requestWithRateLimit
-} from '@/utils';
-import {
-  updateEvents,
-  updateGroupedSports,
-  updateSelectedTab
-} from '@/redux/eventsSlice';
+import { updateEvents, updateFilteredEvents } from '@/redux/eventsSlice';
+import { updateGroupedSports, updateSelectedTab } from '@/redux/filtersSlice';
+import { getGroupedSportsMap, requestWithRateLimit } from '@/utils';
 import {
   Box,
   FlexBox,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeadCell,
-  TableRow,
   Tabs,
   Tab,
   TabPanel,
-  Typography
+  Typography,
+  EmptyData
 } from '@/components';
 import './styles.scss';
 
 export default function HomePage() {
   const dispatch = useDispatch();
-  const { basket } = useSelector((state: RootState) => state.basket);
-  const { events, groupedSports, selectedTabIndex } = useSelector(
+  const { events, filteredEvents } = useSelector(
     (state: RootState) => state.events
   );
+  const { groupedSports, selectedTabIndex, searchText } = useSelector(
+    (state: RootState) => state.filters
+  );
+
   const handleBulkRequests = async (sportsItems: [string, SportsItem[]]) => {
     const [_, itemList] = sportsItems;
 
@@ -54,6 +44,7 @@ export default function HomePage() {
     );
 
     dispatch(updateEvents(resultsArray));
+    dispatch(updateFilteredEvents(resultsArray));
   };
 
   const handleOnChange = async (index: number) => {
@@ -78,6 +69,18 @@ export default function HomePage() {
       });
     }
   }, []);
+
+  const renderEmptyData = () => {
+    if (filteredEvents.length === 0 && searchText) {
+      return <EmptyData>No matches for your search term.</EmptyData>;
+    }
+
+    if (filteredEvents.length === 0) {
+      return (
+        <EmptyData>There are no matches available in this category.</EmptyData>
+      );
+    }
+  };
 
   if (!groupedSports) {
     return <></>;
@@ -116,62 +119,11 @@ export default function HomePage() {
             index={selectedTabIndex}
             style={{ paddingTop: 'var(--spacing-8)' }}
           >
-            {events.map((event, i) => (
-              <Table key={`event-table-${i}`}>
-                <TableHead>
-                  <TableRow>
-                    <TableHeadCell style={{ minWidth: '380px' }}>
-                      <Typography variant="subtitle2" color="white">
-                        {event[0]?.sport_title || '-'}
-                      </Typography>
-                    </TableHeadCell>
-                    <TableHeadCell>
-                      <Typography variant="subtitle2" color="white">
-                        Commence
-                      </Typography>
-                    </TableHeadCell>
-                    <TableHeadCell>
-                      <Typography
-                        align="center"
-                        variant="subtitle2"
-                        color="white"
-                      >
-                        +
-                      </Typography>
-                    </TableHeadCell>
-                  </TableRow>
-                </TableHead>
-
-                <TableBody>
-                  {event.map((e) => (
-                    <TableRow key={`event-table-row-${e.id}`}>
-                      <TableCell>
-                        <Typography variant="body2" weight={500}>
-                          {e.home_team} - {e.away_team}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body2" weight={500}>
-                          {e.commence_time}
-                        </Typography>
-                      </TableCell>
-                      <TableCell
-                        className={ClassNames({
-                          'home-page-event-selected': isSelectedEventItem(
-                            e.id,
-                            basket
-                          )
-                        })}
-                      >
-                        <Link to={`/detail/${e.sport_key}/${e.id}`}>
-                          <Typography variant="subtitle2">→</Typography>
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+            {filteredEvents.map((eventList, i) => (
+              <Bulletin key={`bulletin-${i}`} events={eventList} />
             ))}
+
+            {renderEmptyData()}
           </TabPanel>
         ))}
       </Box>

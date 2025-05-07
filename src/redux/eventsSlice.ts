@@ -1,18 +1,14 @@
-import type { EventItem, SportsItem } from '@/model';
+import type { EventItem } from '@/model';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-type GroupedSportItem = Record<string, Array<SportsItem>> | null;
-
 type EventsState = {
-  selectedTabIndex: number;
   events: Array<Array<EventItem>>;
-  groupedSports: GroupedSportItem;
+  filteredEvents: Array<Array<EventItem>>;
 };
 
 const initialState: EventsState = {
   events: [],
-  groupedSports: null,
-  selectedTabIndex: 0
+  filteredEvents: []
 };
 
 const eventsSlice = createSlice({
@@ -22,15 +18,14 @@ const eventsSlice = createSlice({
     updateEvents: (state, action: PayloadAction<Array<Array<EventItem>>>) => {
       state.events = action.payload;
     },
-    updateSelectedTab: (state, action: PayloadAction<number>) => {
-      state.selectedTabIndex = action.payload;
-    },
-    updateGroupedSports: (state, action: PayloadAction<GroupedSportItem>) => {
-      state.groupedSports = action.payload;
+    updateFilteredEvents: (
+      state,
+      action: PayloadAction<Array<Array<EventItem>>>
+    ) => {
+      state.filteredEvents = action.payload;
     }
   }
 });
 
-export const { updateEvents, updateSelectedTab, updateGroupedSports } =
-  eventsSlice.actions;
+export const { updateEvents, updateFilteredEvents } = eventsSlice.actions;
 export default eventsSlice.reducer;
