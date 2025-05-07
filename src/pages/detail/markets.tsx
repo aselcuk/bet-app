@@ -1,4 +1,4 @@
-import { isSelectedBasketItem } from '@/utils';
+import { isSelectedBasketItem, logToggleBasketEvent } from '@/utils';
 import type { RootState } from '@/redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToBetBasket, removeFromBasket } from '@/redux/betBasketSlice';
@@ -32,11 +32,19 @@ export default function EventDetailMarkets(props: EventDetailMarketsProps) {
   const { basket } = useSelector((state: RootState) => state.basket);
 
   const handleAddOdd = (basketItem: BetBasketItem) => {
+    const { away_team, eventId, home_team, outcome } = basketItem;
+    const eventName = `${home_team}-${away_team}`;
     dispatch(addToBetBasket(basketItem));
+    logToggleBasketEvent(eventId, eventName, outcome.price, 'add_to_cart');
   };
 
-  const handleRemoveOdd = (id: string) => {
-    dispatch(removeFromBasket(id));
+  const handleRemoveOdd = (
+    eventId: string,
+    eventName: string,
+    price: number
+  ) => {
+    dispatch(removeFromBasket(eventId));
+    logToggleBasketEvent(eventId, eventName, price, 'remove_from_cart');
   };
 
   const renderOdds = (
@@ -55,7 +63,11 @@ export default function EventDetailMarkets(props: EventDetailMarketsProps) {
 
       const clickFn = () => {
         return isSelected
-          ? handleRemoveOdd(eventDetail.id)
+          ? handleRemoveOdd(
+              eventDetail.id,
+              `${eventDetail.home_team}-${eventDetail.away_team}`,
+              outcome.price
+            )
           : handleAddOdd({
               outcome,
               eventId: eventDetail.id,

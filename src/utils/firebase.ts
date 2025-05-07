@@ -38,10 +38,9 @@ export const onAuthChange = (callback: (user: User | null) => void) =>
 
 export const logMatchDetailEvent = (eventId: string, eventName: string) => {
   if (analytics) {
-    firebaseLogEvent(analytics, 'view_item', {
-      item_id: eventId,
-      item_name: eventName,
-      item_category: 'match'
+    firebaseLogEvent(analytics, 'view_detail', {
+      event_id: eventId,
+      event_name: eventName
     });
   }
 };
