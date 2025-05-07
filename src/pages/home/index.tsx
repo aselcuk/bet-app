@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Filter from './filter';
 import Bulletin from './bulletin';
-import { useEffect } from 'react';
 import type { SportsItem } from '@/model';
 import type { RootState } from '@/redux/store';
 import { getEvents, getSports } from '@/services';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateEvents, updateFilteredEvents } from '@/redux/eventsSlice';
 import { updateGroupedSports, updateSelectedTab } from '@/redux/filtersSlice';
@@ -21,6 +20,9 @@ import {
 import './styles.scss';
 
 export default function HomePage() {
+  const [loading, setLoading] = useState(false);
+  const controllerRef = useRef<AbortController | null>(null);
+
   const dispatch = useDispatch();
   const { events, filteredEvents } = useSelector(
     (state: RootState) => state.events
@@ -29,22 +31,35 @@ export default function HomePage() {
     (state: RootState) => state.filters
   );
 
-  const handleBulkRequests = async (sportsItems: [string, SportsItem[]]) => {
-    const [_, itemList] = sportsItems;
+  const handleBulkRequests = (sportsItems: [string, SportsItem[]]) => {
+    controllerRef.current?.abort();
 
+    const controller = new AbortController();
+    controllerRef.current = controller;
+
+    setLoading(true);
+
+    const [_, itemList] = sportsItems;
     const resultsArray: any[] = [];
 
-    await requestWithRateLimit(
+    requestWithRateLimit(
       itemList,
-      (item) => getEvents(item.key),
+      (item, signal) => getEvents(item.key, signal),
       25,
       (res, i) => {
         resultsArray[i] = res;
-      }
-    );
-
-    dispatch(updateEvents(resultsArray));
-    dispatch(updateFilteredEvents(resultsArray));
+      },
+      controller.signal
+    )
+      .then(() => {
+        dispatch(updateEvents(resultsArray));
+        dispatch(updateFilteredEvents(resultsArray));
+      })
+      .finally(() => {
+        if (controllerRef.current === controller) {
+          setLoading(false);
+        }
+      });
   };
 
   const handleOnChange = async (index: number) => {
@@ -68,9 +83,17 @@ export default function HomePage() {
         handleBulkRequests(sportsItems);
       });
     }
+
+    return () => {
+      controllerRef.current?.abort();
+    };
   }, []);
 
   const renderEmptyData = () => {
+    if (loading) {
+      return <EmptyData>Loading...</EmptyData>;
+    }
+
     if (filteredEvents.length === 0 && searchText) {
       return <EmptyData>No matches for your search term.</EmptyData>;
     }
@@ -96,12 +119,7 @@ export default function HomePage() {
         <Tabs
           index={selectedTabIndex}
           onChange={handleOnChange}
-          style={{
-            maxWidth: '620px',
-            overflowX: 'auto',
-            backgroundColor: 'var(--color-neutral)',
-            padding: 'var(--spacing-8)'
-          }}
+          className="home-page-tabs"
         >
           {Object.keys(groupedSports).map((k) => (
             <Tab key={`tab-${k}`}>
@@ -117,11 +135,12 @@ export default function HomePage() {
             key={`tab-panel-${i}`}
             value={i}
             index={selectedTabIndex}
-            style={{ paddingTop: 'var(--spacing-8)' }}
+            className="home-page-tab-panel"
           >
-            {filteredEvents.map((eventList, i) => (
-              <Bulletin key={`bulletin-${i}`} events={eventList} />
-            ))}
+            {!loading &&
+              filteredEvents.map((eventList, i) => (
+                <Bulletin key={`bulletin-${i}`} events={eventList} />
+              ))}
 
             {renderEmptyData()}
           </TabPanel>

@@ -9,6 +9,7 @@ import type {
   MarketItem
 } from '@/model';
 import {
+  EmptyData,
   FlexBox,
   OddButton,
   Table,
@@ -120,6 +121,10 @@ export default function EventDetailMarkets(props: EventDetailMarketsProps) {
           </TableBody>
         </Table>
       ))}
+
+      {event.bookmakers.length === 0 && (
+        <EmptyData>Odds for this event are not available yet.</EmptyData>
+      )}
     </FlexBox>
   );
 }

@@ -2,4 +2,15 @@
   &-event-selected {
     background-color: var(--color-warning);
   }
+
+  &-tabs {
+    max-width: 620px;
+    overflow-x: auto;
+    background-color: var(--color-neutral);
+    padding: var(--spacing-8);
+  }
+
+  &-tab-panel {
+    padding: var(--spacing-8);
+  }
 }

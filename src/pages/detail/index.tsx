@@ -10,18 +10,27 @@ import './styles.scss';
 export default function DetailPage() {
   const { id, sport } = useParams();
 
+  const [loading, setLoading] = useState(false);
   const [eventDetail, setEventDetail] = useState<EventDetailItem>();
 
   useEffect(() => {
     if (id && sport) {
-      getEventOdds(id, sport).then((res: EventDetailItem) => {
-        setEventDetail(res);
-      });
+      setLoading(true);
+
+      getEventOdds(id, sport)
+        .then((res: EventDetailItem) => {
+          setEventDetail(res);
+        })
+        .finally(() => setLoading(false));
     }
   }, [id, sport]);
 
+  if (loading) {
+    return <EmptyData>Loading...</EmptyData>;
+  }
+
   if (!eventDetail) {
-    return <EmptyData>Odds for this event are not available yet.</EmptyData>;
+    return <EmptyData>There is no data available for this match.</EmptyData>;
   }
 
   return (
