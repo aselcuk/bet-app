@@ -1,9 +1,13 @@
 import ClassNames from 'classnames';
-import { Link } from 'react-router-dom';
 import type { EventItem } from '@/model';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/redux/store';
-import { formatMatchDate, isSelectedEventItem } from '@/utils';
+import { useNavigate } from 'react-router-dom';
+import {
+  formatMatchDate,
+  isSelectedEventItem,
+  logMatchDetailEvent
+} from '@/utils';
 import {
   Table,
   TableBody,
@@ -21,7 +25,17 @@ type BulletinProps = {
 export default function Bulletin(props: BulletinProps) {
   const { events } = props;
 
+  const navigate = useNavigate();
   const { basket } = useSelector((state: RootState) => state.basket);
+
+  const handleClick = (
+    sportKey: string,
+    eventId: string,
+    eventName: string
+  ) => {
+    navigate(`/detail/${sportKey}/${eventId}`);
+    logMatchDetailEvent(eventId, eventName);
+  };
 
   return (
     <Table>
@@ -59,13 +73,14 @@ export default function Bulletin(props: BulletinProps) {
               </Typography>
             </TableCell>
             <TableCell
-              className={ClassNames({
+              onClick={() =>
+                handleClick(e.sport_key, e.id, `${e.home_team}-${e.away_team}`)
+              }
+              className={ClassNames('home-page-event-detail', {
                 'home-page-event-selected': isSelectedEventItem(e.id, basket)
               })}
             >
-              <Link to={`/detail/${e.sport_key}/${e.id}`}>
-                <Typography variant="subtitle2">→</Typography>
-              </Link>
+              <Typography variant="subtitle2">→</Typography>
             </TableCell>
           </TableRow>
         ))}

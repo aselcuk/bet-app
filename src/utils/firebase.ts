@@ -36,35 +36,26 @@ export const signOutUser = () => signOut(auth);
 export const onAuthChange = (callback: (user: User | null) => void) =>
   onAuthStateChanged(auth, callback);
 
-export const logMatchDetailEvent = (matchId: string) => {
+export const logMatchDetailEvent = (eventId: string, eventName: string) => {
   if (analytics) {
-    firebaseLogEvent(analytics, 'match_detail', { match_id: matchId });
-  }
-};
-
-export const logAddToCartEvent = (
-  itemId: string,
-  itemName: string,
-  price: number
-) => {
-  if (analytics) {
-    firebaseLogEvent(analytics, 'add_to_cart', {
-      item_id: itemId,
-      item_name: itemName,
-      price
+    firebaseLogEvent(analytics, 'view_item', {
+      item_id: eventId,
+      item_name: eventName,
+      item_category: 'match'
     });
   }
 };
 
-export const logRemoveFromCartEvent = (
-  itemId: string,
-  itemName: string,
-  price: number
+export const logToggleBasketEvent = (
+  eventId: string,
+  eventName: string,
+  price: number,
+  type: 'add_to_cart' | 'remove_from_cart'
 ) => {
   if (analytics) {
-    firebaseLogEvent(analytics, 'remove_from_cart', {
-      item_id: itemId,
-      item_name: itemName,
+    firebaseLogEvent(analytics, type, {
+      event_id: eventId,
+      event_name: eventName,
       price
     });
   }

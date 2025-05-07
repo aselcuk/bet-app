@@ -1,4 +1,8 @@
 .home-page {
+  &-event-detail {
+    cursor: pointer;
+  }
+
   &-event-selected {
     background-color: var(--color-warning);
   }
