@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
+import authSlice from './authSlice';
 import eventsSlice from './eventsSlice';
 import filtersSlice from './filtersSlice';
 import betBasketSlice from './betBasketSlice';
 
 export const store = configureStore({
   reducer: {
+    auth: authSlice,
     events: eventsSlice,
     filters: filtersSlice,
     basket: betBasketSlice

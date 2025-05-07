@@ -1,10 +1,30 @@
 .main-layout {
   width: 100%;
-  min-height: 100vh;
-  display: grid;
+  margin: 0 auto;
+  max-width: 1024px;
+  padding: var(--spacing-32);
   column-gap: var(--spacing-16);
+  min-height: calc(100dvh - 128px);
+  display: grid;
   grid-template-areas: 'betList betBasket';
   grid-template-columns: 1fr 320px;
+  background-color: var(--color-white);
+  border-radius: var(--spacing-8);
+
+  &-header {
+    width: 100%;
+    max-width: 1024px;
+    margin: 0 auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--spacing-8);
+    padding: var(--spacing-8);
+    margin-bottom: var(--spacing-16);
+    background-color: var(--color-white);
+
+    &-logout {
+      cursor: pointer;
+    }
+  }
 
   &-bet-list {
     grid-area: betList;

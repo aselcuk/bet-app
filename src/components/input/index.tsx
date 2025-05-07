@@ -1,25 +1,29 @@
+import ClassNames from 'classnames';
 import {
   useState,
   type FocusEvent,
   type ComponentProps,
   type ReactNode
 } from 'react';
-import ClassNames from 'classnames';
 import './styles.scss';
 
 export type InputProps = ComponentProps<'input'> & {
+  error?: boolean;
+  fullWidth?: boolean;
   endAdornment?: ReactNode;
   startAdornment?: ReactNode;
   onAdornmentClick?: () => void;
 };
 
 export const Input = (props: InputProps) => {
-  const { className, onFocus, onBlur, ...rest } = props;
+  const { className, error, fullWidth, onFocus, onBlur, ...rest } = props;
 
   const [inputFocus, setInputFocus] = useState(false);
 
   const classNames = ClassNames('input', {
-    'input-focus': inputFocus,
+    'input-error': error,
+    'input-focus': inputFocus && !error,
+    'input-full-width': fullWidth,
     [`${className}`]: className
   });
 

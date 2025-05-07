@@ -7,9 +7,17 @@
   font-family: var(--font-family);
   font-size: var(--font-size-body1);
 
+  &-error {
+    border-color: var(--color-error);
+  }
+
   &-focus {
     outline: none;
-    border: 1px solid var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  &-full-width {
+    width: 100%;
   }
 
   &::placeholder {

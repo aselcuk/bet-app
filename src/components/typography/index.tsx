@@ -11,7 +11,7 @@ export type TypographyVariant =
   | 'body2'
   | 'caption';
 
-export type TypographyColor = 'text' | 'primary' | 'black' | 'white';
+export type TypographyColor = 'text' | 'primary' | 'black' | 'white' | 'error';
 
 export type TypographyAlign = 'center' | 'end' | 'justify' | 'left';
 

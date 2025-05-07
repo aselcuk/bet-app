@@ -2,6 +2,7 @@ export * from './box';
 export * from './tabs';
 export * from './input';
 export * from './table';
+export * from './button';
 export * from './flexBox';
 export * from './emptyData';
 export * from './oddButton';

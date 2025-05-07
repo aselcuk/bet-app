@@ -1,42 +1,49 @@
+import { useEffect, useState } from 'react';
+import { router } from './routes';
 import { Box } from './components';
-import { store } from './redux/store';
-import { MainLayout } from './layouts';
-import { Provider } from 'react-redux';
-import { DetailPage, HomePage, NotFoundPage } from './pages';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { onAuthChange } from './utils';
+import type { RootState } from './redux/store';
+import { RouterProvider } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAuthLoading, setUser } from './redux/authSlice';
 import './styles/index.scss';
 import './app.scss';
 
 function App() {
-  const router = createBrowserRouter([
-    {
-      path: '/',
-      element: <MainLayout />,
-      children: [
-        {
-          path: '/',
-          element: <HomePage />,
-          index: true
-        },
-        {
-          path: '/detail/:sport/:id',
-          element: <DetailPage />
-        },
-        {
-          path: '*',
-          element: <NotFoundPage />
-        }
-      ]
-    }
-  ]);
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state: RootState) => state.auth);
+
+  const [isAuthChanged, setIsAuthChanged] = useState(false);
+
+  useEffect(() => {
+    dispatch(setAuthLoading(true));
+
+    const unsubscribe = onAuthChange((user) => {
+      if (user) {
+        dispatch(
+          setUser({
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName
+          })
+        );
+      } else {
+        dispatch(setUser(null));
+      }
+      dispatch(setAuthLoading(false));
+      setIsAuthChanged(true);
+    });
+
+    return unsubscribe;
+  }, [dispatch]);
+
+  if (loading || !isAuthChanged) {
+    return <></>;
+  }
 
   return (
     <Box className="app">
-      <Box className="app-container">
-        <Provider store={store}>
-          <RouterProvider router={router} />
-        </Provider>
-      </Box>
+      <RouterProvider router={router} />
     </Box>
   );
 }

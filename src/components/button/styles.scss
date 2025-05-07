@@ -1,0 +1,20 @@
+.button {
+  height: 40px;
+  outline: none;
+  border: unset;
+  cursor: pointer;
+  color: var(--color-white);
+  border-radius: var(--spacing-8);
+  padding: var(--spacing-8) var(--spacing-16);
+  font-size: var(--font-size-body1);
+  background-color: var(--color-primary);
+
+  &-full-width {
+    width: 100%;
+  }
+
+  &-disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
