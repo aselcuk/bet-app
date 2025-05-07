@@ -25,12 +25,24 @@ const filtersSlice = createSlice({
     updateSelectedTab: (state, action: PayloadAction<number>) => {
       state.selectedTabIndex = action.payload;
     },
-    updateGroupedSports: (state, action: PayloadAction<GroupedSportItem>) => {
+    updateGroupedSports: (
+      state,
+      action: PayloadAction<GroupedSportItem | null>
+    ) => {
       state.groupedSports = action.payload;
+    },
+    clearFilters: (state) => {
+      state.searchText = '';
+      state.groupedSports = null;
+      state.selectedTabIndex = 0;
     }
   }
 });
 
-export const { updateSearchText, updateSelectedTab, updateGroupedSports } =
-  filtersSlice.actions;
+export const {
+  updateSearchText,
+  updateSelectedTab,
+  updateGroupedSports,
+  clearFilters
+} = filtersSlice.actions;
 export default filtersSlice.reducer;

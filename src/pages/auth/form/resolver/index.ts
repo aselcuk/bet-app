@@ -3,9 +3,9 @@ import type { FieldValues } from 'react-hook-form';
 import {
   validationFormItemEmail,
   validationFormItemPassword
-} from './validations';
+} from '../validations';
 
-export const loginSchema = (): yup.ObjectSchema<
+export const schema = (): yup.ObjectSchema<
   FieldValues,
   yup.AnyObject,
   any,

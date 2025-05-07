@@ -20,9 +20,13 @@ const betBasketSlice = createSlice({
     removeFromBasket: (state, action: PayloadAction<string>) => {
       const id = action.payload;
       delete state.basket[id];
+    },
+    clearBasket: (state) => {
+      state.basket = {};
     }
   }
 });
 
-export const { addToBetBasket, removeFromBasket } = betBasketSlice.actions;
+export const { addToBetBasket, removeFromBasket, clearBasket } =
+  betBasketSlice.actions;
 export default betBasketSlice.reducer;

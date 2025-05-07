@@ -23,9 +23,14 @@ const eventsSlice = createSlice({
       action: PayloadAction<Array<Array<EventItem>>>
     ) => {
       state.filteredEvents = action.payload;
+    },
+    clearEvents: (state) => {
+      state.events = [];
+      state.filteredEvents = [];
     }
   }
 });
 
-export const { updateEvents, updateFilteredEvents } = eventsSlice.actions;
+export const { updateEvents, updateFilteredEvents, clearEvents } =
+  eventsSlice.actions;
 export default eventsSlice.reducer;

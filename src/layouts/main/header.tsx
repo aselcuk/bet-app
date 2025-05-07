@@ -1,15 +1,25 @@
 import { signOutUser } from '@/utils';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import type { RootState } from '@/redux/store';
 import { Box, FlexBox, Typography } from '@/components';
+import { logout } from '@/redux/authSlice';
+import { clearEvents } from '@/redux/eventsSlice';
+import { clearBasket } from '@/redux/betBasketSlice';
+import { clearFilters } from '@/redux/filtersSlice';
 
 const Header = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.auth);
 
   const handleLogout = () => {
     signOutUser().then(() => {
+      dispatch(logout());
+      dispatch(clearEvents());
+      dispatch(clearBasket());
+      dispatch(clearFilters());
+
       navigate('/auth/signin');
     });
   };

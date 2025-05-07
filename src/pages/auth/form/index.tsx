@@ -1,13 +1,23 @@
 import { useState } from 'react';
-import { signUp } from '@/utils';
-import { loginSchema } from '@/utils/schema';
+import { schema } from './resolver';
+import type { UserCredential } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, type FieldValues } from 'react-hook-form';
 import { Box, Button, FlexBox, Input, Typography } from '@/components';
 import './styles.scss';
 
-export default function SignUp() {
+type SignFormProps = {
+  title: string;
+  buttonText: string;
+  redirectUrl: string;
+  redirectText: string;
+  postMethod(email: string, password: string): Promise<UserCredential>;
+};
+
+export default function AuthForm(props: SignFormProps) {
+  const { buttonText, redirectText, redirectUrl, title, postMethod } = props;
+
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
@@ -17,7 +27,7 @@ export default function SignUp() {
     register,
     formState: { errors }
   } = useForm<FieldValues>({
-    resolver: yupResolver(loginSchema()),
+    resolver: yupResolver(schema()),
     defaultValues: {
       email: '',
       password: ''
@@ -30,18 +40,30 @@ export default function SignUp() {
 
     const { email, password } = formData;
 
-    signUp(email, password)
+    postMethod(email, password)
       .then(() => navigate('/'))
       .finally(() => setLoading(false));
   };
 
+  const renderFieldError = (field: string) => {
+    if (!errors[field]) {
+      return <></>;
+    }
+
+    return (
+      <Typography variant="caption" color="error">
+        <>{errors[field].message}</>
+      </Typography>
+    );
+  };
+
   return (
-    <Box className="sign-up-page">
+    <Box className="auth-form">
       <form onSubmit={handleSubmit(onSubmit)}>
         <FlexBox direction="column" gap="var(--spacing-24)">
           <Box>
             <Typography align="center" variant="body2">
-              Please enter your details below to sign up
+              {title}
             </Typography>
           </Box>
 
@@ -55,11 +77,7 @@ export default function SignUp() {
                   {...register('email')}
                 />
 
-                {errors.email && (
-                  <Typography variant="caption" color="error">
-                    <>{errors.email.message}</>
-                  </Typography>
-                )}
+                {renderFieldError('email')}
               </Box>
 
               <Box>
@@ -70,11 +88,7 @@ export default function SignUp() {
                   {...register('password')}
                 />
 
-                {errors.password && (
-                  <Typography variant="caption" color="error">
-                    <>{errors.password.message}</>
-                  </Typography>
-                )}
+                {renderFieldError('password')}
               </Box>
             </FlexBox>
           </Box>
@@ -82,7 +96,7 @@ export default function SignUp() {
           <Box>
             <Button fullWidth disabled={loading} type="submit">
               <Typography variant="subtitle2" color="white" weight={600}>
-                Sign Up
+                {buttonText}
               </Typography>
             </Button>
           </Box>
@@ -94,14 +108,14 @@ export default function SignUp() {
           </Box>
 
           <Box>
-            <Link to="/auth/signin">
+            <Link to={redirectUrl}>
               <Typography
                 variant="body2"
                 align="center"
                 weight={500}
                 color="primary"
               >
-                Sign In
+                {redirectText}
               </Typography>
             </Link>
           </Box>
