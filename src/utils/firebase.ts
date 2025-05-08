@@ -19,6 +19,7 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
+// Firebase Auth
 export const firebase = initializeApp(firebaseConfig);
 
 export const analytics = getAnalytics(firebase);
@@ -36,6 +37,7 @@ export const signOutUser = () => signOut(auth);
 export const onAuthChange = (callback: (user: User | null) => void) =>
   onAuthStateChanged(auth, callback);
 
+// Analytics
 export const logMatchDetailEvent = (eventId: string, eventName: string) => {
   if (analytics) {
     firebaseLogEvent(analytics, 'view_detail', {

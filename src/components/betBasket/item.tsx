@@ -1,8 +1,8 @@
-import { Box, FlexBox, OddButton, Typography } from '..';
 import ClassNames from 'classnames';
-import type { ComponentProps } from 'react';
-import type { BetBasketItem as BetBasketItemModel } from '@/model';
 import { formatMatchDate } from '@/utils';
+import type { ComponentProps } from 'react';
+import { Box, FlexBox, OddButton, Typography } from '..';
+import type { BetBasketItem as BetBasketItemModel } from '@/model';
 
 export type BetBasketItemProps = ComponentProps<'div'> & {
   basketItem: BetBasketItemModel;
@@ -30,7 +30,7 @@ export const BetBasketItem = (props: BetBasketItemProps) => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <Box style={{ minWidth: 0 }}>
+          <Box className="bet-basket-item-title">
             <Typography truncate variant="subtitle2" color="black">
               {basketItem.home_team} - {basketItem.away_team}
             </Typography>

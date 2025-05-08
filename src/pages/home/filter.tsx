@@ -45,8 +45,8 @@ export default function Filter() {
 
   return (
     <Input
+      fullWidth
       placeholder="Search"
-      style={{ width: '100%' }}
       onChange={handleSearch}
       value={searchText}
     />

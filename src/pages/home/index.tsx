@@ -123,7 +123,7 @@ export default function HomePage() {
         >
           {Object.keys(groupedSports).map((k) => (
             <Tab key={`tab-${k}`}>
-              <Typography variant="subtitle2" style={{ whiteSpace: 'nowrap' }}>
+              <Typography variant="subtitle2" className="home-page-tabs-title">
                 {k}
               </Typography>
             </Tab>

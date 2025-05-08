@@ -83,6 +83,7 @@ export default function AuthForm(props: SignFormProps) {
               <Box>
                 <Input
                   fullWidth
+                  type="password"
                   error={!!errors.password}
                   placeholder="Password"
                   {...register('password')}

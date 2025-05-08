@@ -1,9 +1,10 @@
 import ClassNames from 'classnames';
 import { BetBasketItem } from './item';
-import { useDispatch, useSelector } from 'react-redux';
 import type { ComponentProps } from 'react';
 import { Box, FlexBox, Typography } from '..';
 import type { RootState } from '@/redux/store';
+import { logToggleBasketEvent } from '@/utils';
+import { useDispatch, useSelector } from 'react-redux';
 import { removeFromBasket } from '@/redux/betBasketSlice';
 import type { BetBasketItem as BetBasketItemModel } from '@/model';
 import './styles.scss';
@@ -19,7 +20,6 @@ export const BetBasket = (props: BetBasketProps) => {
   const matches = Object.entries(basket);
   const matchLength = matches.length;
   const isEmpty = matchLength === 0;
-
   const total = matches.reduce((acc, [, item]) => {
     return acc * item.outcome.price;
   }, 1);
@@ -29,7 +29,11 @@ export const BetBasket = (props: BetBasketProps) => {
   });
 
   const handleRemove = (item: BetBasketItemModel) => {
+    const { eventId, home_team, away_team, outcome } = item;
+    const eventName = `${home_team}-${away_team}`;
+
     dispatch(removeFromBasket(item.eventId));
+    logToggleBasketEvent(eventId, eventName, outcome.price, 'remove_from_cart');
   };
 
   return (
@@ -68,7 +72,7 @@ export const BetBasket = (props: BetBasketProps) => {
             <FlexBox
               alignItems="center"
               justifyContent="center"
-              style={{ minHeight: '150px' }}
+              className="bet-basket-empty-data"
             >
               <Typography variant="body2" color="black">
                 There are no matches in your bet slip.

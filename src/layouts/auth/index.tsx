@@ -8,8 +8,8 @@ const AuthLayout = () => {
       direction="column"
       alignItems="center"
       justifyContent="center"
-      className="auth-layout"
       gap="var(--spacing-32)"
+      className="auth-layout"
     >
       <Box>
         <Typography variant="subtitle1" color="primary">
